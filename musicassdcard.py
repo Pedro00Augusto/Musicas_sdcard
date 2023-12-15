@@ -2,7 +2,7 @@
 import pandas as pd
 
 
-diret = 'D:/Sd card/Audio/Todas as Musicas/musicassdcard.csv'
+diret = '/musicassdcard.csv'
 pontovirg = ';' 
 lista = ['File Extension', 'Artistas participantes', 'Álbum', 'Tamanho', 'Artista do Álbum']
 
@@ -443,7 +443,7 @@ basefinal['Nome'] = ''
 basefinal['Nome'] = basefinal['Artista'] + ' - ' + basefinal['Título']
 
 #Gerando uma planilha Excel com os dados tratados
-#basefinal.to_excel('C:/Users/Admin/Desktop/Projetos Python/musicas_sdcard_tratada.xlsx', index = False)
+#basefinal.to_excel('/musicas_sdcard_tratada.xlsx', index = False)
 
 
 
