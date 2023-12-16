@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
+import os
 
 
 diret = '/musicassdcard.csv'
@@ -425,15 +426,19 @@ basefinal['Genero'][0] = 'Hardstyle'
 basefinal['Título'][67] = 'Mãe'    
 basefinal['Genero'][79] = 'Hardstyle'
 basefinal['Artista'][85], basefinal['Título'][85], basefinal['Genero'][85] = 'Aerosmith',"I Don't Want To Miss A Thing",'Rock'
+basefinal['Título'][99] = 'Summer 3Rd Mvt Four Seasons'
 basefinal['Genero'][103] = 'Hardstyle'
 basefinal['Título'][110] = 'Always'
+basefinal['Título'][120] = 'Suite For Cello Solo No 1 In G, Bwv 1007 1 Prélude'
+basefinal['Artista'][183] = 'Bundesliga Temporada 15 16'
 basefinal['Artista'][200], basefinal['Título'][200], basefinal['Genero'][200] = 'Da Tweekaz',"Game Of Thrones",'Hardstyle'
 basefinal['Genero'][206] = 'Instrumental'
-basefinal['Genero'][219] = 'Edm'
+basefinal['Genero'][219] = 'EDM'
 basefinal['Genero'][234] = 'Hardstyle'
-basefinal['Genero'][240] = 'Edm'
+basefinal['Genero'][240] = 'EDM'
 basefinal['Genero'][246] = 'Hardstyle'
-basefinal['Genero'][354] = 'Edm'
+basefinal['Genero'][354] = 'EDM'
+basefinal['Título'][374] = 'E Se Ganhássemos Na Loteria'
 basefinal['Artista'][395], basefinal['Título'][395], basefinal['Genero'][395] = 'Pegboard Nerds Feat. Elizaveta',"Hero (Da Tweekaz Remix)",'Hardstyle'
 basefinal['Título'][427] = 'Samba Em Prelúdio'
 basefinal['Título'][478] = "Si Jamais J'Oublie"
@@ -441,19 +446,53 @@ basefinal['Genero'][482] = 'Hardstyle'
 
 basefinal['Nome'] = ''
 basefinal['Nome'] = basefinal['Artista'] + ' - ' + basefinal['Título']
+basefinal['Nome Original'] = base_copia['Name']
+basefinal['Extensao'] = base_copia['File Extension']
 
 #Gerando uma planilha Excel com os dados tratados
 #basefinal.to_excel('/musicas_sdcard_tratada.xlsx', index = False)
 
+path = '/Todas as Musicas' #Este é o caminho das musicas salvas em meu computador
+nomes_originais = os.listdir(path)
+sigla_generos = {'Hardstyle': ' (Hard)', 'HandsUp': ' (HUp)', 'EDM': ' (EDM)', 'Rock': ' (Rock)', 'Brasileira': ' (Bra)', 'Italiana': ' (Ita)', 'Pop Gringo': ' (Pop G)', 'Instrumental': ' (Inst)', 'Outros': ' (Out)', 'Podcast': ' (Pod)'}
 
-
+for n in range(0,len(basefinal)):
+    nome = basefinal['Nome'][n].replace(':','')
+    sigla = sigla_generos[basefinal['Genero'][n]]
+    extensao = basefinal['Extensao'][n]
+    basefinal['Nome'][n] = nome + sigla + extensao
+    
+    
+nomes_trocados = pd.DataFrame(nomes_originais)
+nomes_trocados['Nome Trocado'] = ''
+      
+def trocar_nomes():
+    for i in range(0, len(nomes_originais)):
+        name = nomes_originais[i]    
+        for n in range(0,len(basefinal)):
+            nome = basefinal['Nome Original'][n]
+            nome_trocado = basefinal['Nome'][n]
+            if nome == name:
+                nomes_trocados['Nome Trocado'][i] = nome_trocado
+            elif nomes_trocados['Nome Trocado'][i] == '':
+                nomes_trocados['Nome Trocado'][i] = name                 
+    return 
                                  
-           
+trocar_nomes()
+        
 
-
-
-
-
+def renomear_arquivos():  
+        for n in range(0, len(nomes_originais)):
+            m = nomes_originais[n]
+            p = nomes_trocados['Nome Trocado'][n]
+            try:
+                os.rename(path + f'/{m}', path + f'/{p}')
+            except FileExistsError:
+                pass
+                        
+            
+            
+renomear_arquivos()
 
 
 
